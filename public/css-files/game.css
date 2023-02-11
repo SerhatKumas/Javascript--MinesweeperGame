@@ -1,0 +1,19 @@
+/* Main Page Css File */
+
+/* Google Fonts import link */
+@import url('https://fonts.googleapis.com/css2?family=Itim&display=swap');
+
+ body {
+     height: 100vh;
+     width: 100vw;
+     background-color: black;
+     font-family: 'Itim', cursive;
+     overflow: hidden;
+}
+
+  .tic-btn {
+    height: 14vh;
+    width: 16vh;
+    border-radius: 3vh;
+    background-color: grey;
+  }
