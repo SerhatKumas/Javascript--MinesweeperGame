@@ -36,6 +36,7 @@ function checkTheField(id){
         document.getElementById(id).style.backgroundColor = "green";
         clickedFieldCount++;
         if(clickedFieldCount == numberOfMineField - numberOfMines){
+            determineNumberOfMinesAroundField(id);
             gameWinActions();
         }
     }
@@ -60,5 +61,17 @@ function colorizeMineMatrix(){
         else{
             document.getElementById(i).style.backgroundColor = "green";
         }
+    }
+}
+
+function resetGame(){
+    for(let i = 1; i <= numberOfMineField; i++){
+        document.getElementById(i).disabled = false;
+        document.getElementById(i).style.backgroundColor = "black";
+        placeArray = null;
+        numberOfMines = 0;
+        clickedFieldCount = 0;
+        document.getElementById("game-result").innerHTML = "";
+        gameInitializer();
     }
 }
