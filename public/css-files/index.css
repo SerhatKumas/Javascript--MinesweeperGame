@@ -12,19 +12,21 @@
      font-family: 'Itim', cursive;
      overflow: hidden;
 }
+
  #centerized-div {
      min-height: 100vh 
 }
 
-/* Game Button positioning*/
- #game-button {
+/* Main Menu Buttons styling */
+ #main-button {
      margin-top: 30vh;
      width: 300px;
      height: 100px;
      font-size: xx-large;
 }
 
-#game-header{
+/* Main Menu Game Name Header styling */
+#main-menu-game-header{
     font-size: 10vh;
     margin-top: 30vh;
     font-weight: bolder;

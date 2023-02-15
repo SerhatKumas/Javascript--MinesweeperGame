@@ -1,104 +1,141 @@
-let placeArray = null;
+// Random number of mines are created each round
 let numberOfMines = 0;
+// Array that holds place of randomly created mines
+let placeArray = null;
+// Number of total minefield
 let numberOfMineField = 25;
+// Number of how many times mine fields are clicked by user
 let clickedFieldCount = 0;
 
-function gameInitializer(){
-let maxNumberOfMines = 5;
-let numberOfMines = randomNumberCreatorForMines(maxNumberOfMines);
-document.getElementById("mine-num").innerHTML = numberOfMines;
-placeArray = randomPlaceCreatorForMines(numberOfMines);
+// Game initializer method every round
+function gameInitializer() {
+    let maxNumberOfMines = 5;
+    let numberOfMines = randomNumberCreatorForMines(maxNumberOfMines);
+    document.getElementById("mine-num").innerHTML = numberOfMines;
+    placeArray = randomPlaceCreatorForMines(numberOfMines);
 }
 
-function randomNumberCreatorForMines(maxNumberOfMines){
-numberOfMines = Math.floor(Math.random() * maxNumberOfMines) + 1;
-return numberOfMines;
+// Determiner method fo how many mines will be created
+function randomNumberCreatorForMines(maxNumberOfMines) {
+    numberOfMines = Math.floor(Math.random() * maxNumberOfMines) + 1;
+    return numberOfMines;
 }
 
-function randomPlaceCreatorForMines(numberOfMines){
+// Random place of mine creator according to number of mine is created
+function randomPlaceCreatorForMines(numberOfMines) {
     let placeArray = []
-    while(placeArray.length < numberOfMines){
+    while (placeArray.length < numberOfMines) {
         let place = Math.floor(Math.random() * 25) + 1;
-        if(!placeArray.includes(place)){
+        if (!placeArray.includes(place)) {
             placeArray.push(place);
-        } 
+        }
     }
     return placeArray;
 }
 
-function checkTheField(id){
-    if(placeArray.includes(parseInt(id))){
-    document.getElementById(id).style.backgroundColor = "red";
-    gameLostActions();
-    }
-    else{
+// Method that checks whether field is mine or not
+// If field is mine, it finishes the game
+// If field is not mine, it writes mine around the field and paints field with green 
+function checkTheField(id) {
+    //Checking whether field is mine
+    if (placeArray.includes(parseInt(id))) {
+        // Painting field with red
+        document.getElementById(id).style.backgroundColor = "red";
+        // Game lost actions method is executed
+        gameLostActions();
+    } else {
+        // If field is not mine
+        // Field is painted with green
         document.getElementById(id).style.backgroundColor = "green";
+        // It disables the field clicked and not mine
+        document.getElementById(id).disabled = true;
+        // Number of clicked is increased for checking game win cases
         clickedFieldCount++;
+        // Number of araound mines are written into field
         document.getElementById(id).innerHTML = determineNumberOfFieldsAround(id);
-        if(clickedFieldCount == numberOfMineField - numberOfMines){
+        // If total field - number of mines are clicked, it means player won the game
+        if (clickedFieldCount == numberOfMineField - numberOfMines) {
+            // Game win actions method is executed
             gameWinActions();
         }
     }
 }
 
-function gameLostActions(){
+// Game Loss method that paints every field according to whether field is mine or not with red and green
+// It prints out game loss header
+function gameLostActions() {
     colorizeMineMatrix();
     document.getElementById("game-result").innerHTML = "You Lost The Game";
 }
 
-function gameWinActions(){
+// Game Loss method that paints every field according to whether field is mine or not with red and green
+// It prints out game won header
+function gameWinActions() {
     colorizeMineMatrix();
     document.getElementById("game-result").innerHTML = "You Won The Game";
 }
 
-function colorizeMineMatrix(){
-    for(let i = 1; i <= numberOfMineField; i++){
+// It paints every field according to whether field is mine or not with red and green and disables every field
+function colorizeMineMatrix() {
+    for (let i = 1; i <= numberOfMineField; i++) {
         document.getElementById(i).disabled = true;
-        if(placeArray.includes(i)){
+        if (placeArray.includes(i)) {
             document.getElementById(i).style.backgroundColor = "red";
-        }
-        else{
+        } else {
             document.getElementById(i).style.backgroundColor = "green";
         }
     }
 }
 
-function resetGame(){
-    for(let i = 1; i <= numberOfMineField; i++){
+// Resets every parameter, and starts new game
+function resetGame() {
+    for (let i = 1; i <= numberOfMineField; i++) {
+        // Enables every field
         document.getElementById(i).disabled = false;
+        // Paints every field into black (original game starting color)
         document.getElementById(i).style.backgroundColor = "black";
         placeArray = null;
         numberOfMines = 0;
         clickedFieldCount = 0;
+        // Clears every mine field prediction numbers
         document.getElementById("game-result").innerHTML = "";
+        // Starts new game
         gameInitializer();
     }
 }
 
-function determineNumberOfFieldsAround(stringId){
+// It covers 3 cases which are left side, right side and rest of the field in matrix
+// It creates place array around clicked button
+// Returns number of mines around the clicked button to checkTheField method to write 
+function determineNumberOfFieldsAround(stringId) {
     let id = parseInt(stringId);
-    let mineNumberAround = 0 ;
+    let mineNumberAround = 0;
     let numberOfFieldsAround = []
-    if(id % 5 == 0){
-        numberOfFieldsAround = [id-1,id-5,id+5,id-6,id+4];
+    // Left side of the matrix
+    if (id % 5 == 0) {
+        numberOfFieldsAround = [id - 1, id - 5, id + 5, id - 6, id + 4];
         mineNumberAround = returnNumberOfMinesAround(numberOfFieldsAround);
     }
-    else if (id % 5 == 1){
-        numberOfFieldsAround = [id+1,id-5,id+5,id+6,id-4];
+    // Right side of the matrix
+    else if (id % 5 == 1) {
+        numberOfFieldsAround = [id + 1, id - 5, id + 5, id + 6, id - 4];
         mineNumberAround = returnNumberOfMinesAround(numberOfFieldsAround);
     }
-    else{
-        numberOfFieldsAround = [id-1,id+1,id-5,id+5,id+6,id-6,id-4,id+4];
+    // Middle par of the matrix
+    else {
+        numberOfFieldsAround = [id - 1, id + 1, id - 5, id + 5, id + 6, id - 6, id - 4, id + 4];
         mineNumberAround = returnNumberOfMinesAround(numberOfFieldsAround);
     }
-return mineNumberAround;
-    
+    return mineNumberAround;
+
 }
 
-function returnNumberOfMinesAround(numberOfFieldsAround){
-    let mineNumberAround = 0 ;
+// Returns number of mines around the clicked button by checking whether field around button is in placeArray
+// placeArray -> It holds place of the mines
+function returnNumberOfMinesAround(numberOfFieldsAround) {
+    let mineNumberAround = 0;
     numberOfFieldsAround.forEach(element => {
-        if(placeArray.includes(element)){
+        if (placeArray.includes(element)) {
             mineNumberAround++;
         }
     });
