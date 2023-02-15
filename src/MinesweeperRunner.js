@@ -23,7 +23,6 @@ function randomPlaceCreatorForMines(numberOfMines){
             placeArray.push(place);
         } 
     }
-    console.log(placeArray);
     return placeArray;
 }
 
@@ -35,8 +34,8 @@ function checkTheField(id){
     else{
         document.getElementById(id).style.backgroundColor = "green";
         clickedFieldCount++;
+        document.getElementById(id).innerHTML = determineNumberOfFieldsAround(id);
         if(clickedFieldCount == numberOfMineField - numberOfMines){
-            determineNumberOfMinesAroundField(id);
             gameWinActions();
         }
     }
@@ -74,4 +73,34 @@ function resetGame(){
         document.getElementById("game-result").innerHTML = "";
         gameInitializer();
     }
+}
+
+function determineNumberOfFieldsAround(stringId){
+    let id = parseInt(stringId);
+    let mineNumberAround = 0 ;
+    let numberOfFieldsAround = []
+    if(id % 5 == 0){
+        numberOfFieldsAround = [id-1,id-5,id+5,id-6,id+4];
+        mineNumberAround = returnNumberOfMinesAround(numberOfFieldsAround);
+    }
+    else if (id % 5 == 1){
+        numberOfFieldsAround = [id+1,id-5,id+5,id+6,id-4];
+        mineNumberAround = returnNumberOfMinesAround(numberOfFieldsAround);
+    }
+    else{
+        numberOfFieldsAround = [id-1,id+1,id-5,id+5,id+6,id-6,id-4,id+4];
+        mineNumberAround = returnNumberOfMinesAround(numberOfFieldsAround);
+    }
+return mineNumberAround;
+    
+}
+
+function returnNumberOfMinesAround(numberOfFieldsAround){
+    let mineNumberAround = 0 ;
+    numberOfFieldsAround.forEach(element => {
+        if(placeArray.includes(element)){
+            mineNumberAround++;
+        }
+    });
+    return mineNumberAround;
 }
